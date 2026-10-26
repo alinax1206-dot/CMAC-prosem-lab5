@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>In the Lotus Pond 🪷</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;family=Cormorant+Garamond:wght@400;600&amp;display=swap" rel="stylesheet">
+    <style>
+    body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            ellipse at 22% 12%,
+            rgba(240, 189, 203, 0.23) 0%,
+            rgba(240, 189, 203, 0.09) 26%,
+            transparent 62%
+        ),
+        radial-gradient(
+            ellipse at 88% 88%,
+            rgba(177, 198, 166, 0.22) 0%,
+            rgba(177, 198, 166, 0.08) 28%,
+            transparent 66%
+        ),
+        #f7f3ed;
+
+    font-family:
+        "DM Sans",
+        "Avenir Next",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+    color: #46534f;
+
+    text-align: center;
+
+    padding: 40px 20px 70px;
+
+    box-sizing: border-box;
+}
+
+h1 {
+    margin: 0 auto 18px;
+
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    font-size: clamp(40px, 5.5vw, 60px);
+    font-weight: 600;
+    line-height: 1.2;
+
+    letter-spacing: 0.035em;
+    text-wrap: balance;
+
+    color: #435d58;
+}
+
+.subtitle {
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    margin: 0 auto 24px;
+
+    font-size: 17px;
+    font-weight: 400;
+    font-style: italic;
+
+    line-height: 1.7;
+    letter-spacing: 0.15px;
+    text-wrap: balance;
+
+    color: #7d8c85;
+}
+
+/* Match the heading's left edge to the artwork grid without moving it. */
+body > h1,
+body > .subtitle {
+    max-width: 1198px;
+    text-align: left;
+}
+
+/* Layout keeps the original 800 × 500 pond coordinates intact. */
+.main-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 882px) 280px;
+    align-items: center;
+    gap: 36px;
+    max-width: 1198px;
+    margin: 36px auto 0;
+}
+.artwork-frame {
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 40px;
+    position: relative;
+    border: 1px solid rgba(184, 173, 151, 0.26);
+    border-radius: 18px;
+    background: #fbf8f1;
+    box-shadow:
+        0 3px 8px rgba(102, 91, 72, 0.025),
+        0 18px 42px rgba(102, 91, 72, 0.045);
+}
+.artwork-frame::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 12px;
+    pointer-events: none;
+}
+.pond-stage {
+    width: 100%;
+    aspect-ratio: 8 / 5;
+    position: relative;
+    min-width: 0;
+}
+.pond-stage .pond {
+    margin: 0;
+    transform-origin: top left;
+}
+.interaction-panel {
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 28px;
+    background: rgba(255, 253, 249, 0.85);
+    box-shadow: 0 12px 36px rgba(84, 119, 116, 0.09);
+    text-align: left;
+}
+.camera-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0.1px;
+    color: #435d58;
+}
+.camera-dot {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #e99bb1;
+    box-shadow: 0 0 0 4px rgba(233, 155, 177, 0.13);
+}
+#webcam-container {
+    width: 150px;
+    height: 150px;
+    margin: 22px auto 16px;
+    border: 5px solid white;
+    border-radius: 22px;
+    overflow: hidden;
+    background: #eaf1eb;
+    box-shadow: 0 6px 20px rgba(84, 119, 116, 0.1);
+}
+#webcam-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.interaction-hint {
+    margin: 0 0 24px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #7d8c85;
+}
+.prediction { margin-top: 16px; }
+.prediction-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.prediction-label output {
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+    color: #7d8c85;
+}
+.prediction-track {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #f1ebe7;
+}
+.prediction-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.15s linear;
+}
+.near-fill { background: #e8a3b7; }
+.far-fill { background: #9bb59a; }
+.pond-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #e9ede5;
+    font-size: 12px;
+    color: #7d8c85;
+}
+.status-badge {
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #e7eee3;
+    color: #587454;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.8px;
+}
+.status-badge.is-hiding { background: #f8e2e9; color: #a35e76; }
+@media (max-width: 760px) {
+    body { padding: 28px 16px 40px; }
+    h1 { font-size: clamp(34px, 8vw, 46px); }
+    .main-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; }
+    .artwork-frame { padding: 20px; border-radius: 16px; }
+    .interaction-panel { width: 100%; max-width: 340px; box-sizing: border-box; justify-self: center; }
+}
+
+    .pond {
+        width: 800px;
+        height: 500px;
+        background:
+            radial-gradient(ellipse at 27% 19%, rgba(241, 255, 252, 0.55), transparent 43%),
+            radial-gradient(ellipse at 78% 72%, rgba(123, 211, 222, 0.42), transparent 48%),
+            radial-gradient(ellipse at 54% 112%, rgba(51, 122, 144, 0.24), transparent 60%),
+            linear-gradient(155deg, #b9edf3 0%, #91dce6 32%, #6bc3d7 68%, #83d3de 100%);
+        border-radius: 50%;
+        margin: 18px auto 0;
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        box-shadow:
+            0 22px 55px rgba(73, 151, 166, 0.14),
+            inset 0 -18px 42px rgba(48, 119, 139, 0.10),
+            inset 0 10px 34px rgba(243, 255, 252, 0.24);
+    }
+
+/* Water light (0), ripples (1), koi (2), leaf/stem (3), lotus (4). */
+.pond::before,
+.pond::after {
+    content: "";
+    position: absolute;
+    inset: -8%;
+    z-index: 0;
+    pointer-events: none;
+}
+.pond::before {
+    background:
+        radial-gradient(ellipse at 32% 32%, rgba(249, 255, 246, 0.22), transparent 26%),
+        radial-gradient(ellipse at 65% 63%, rgba(224, 255, 249, 0.17), transparent 33%),
+        radial-gradient(ellipse at 79% 24%, rgba(245, 255, 252, 0.16), transparent 20%);
+    filter: blur(14px);
+    animation: waterLightDrift 26s ease-in-out infinite alternate;
+}
+.pond::after {
+    background:
+        radial-gradient(ellipse at 20% 57%, transparent 16%, rgba(240, 255, 250, 0.13) 22%, transparent 30%),
+        radial-gradient(ellipse at 62% 28%, transparent 13%, rgba(235, 255, 252, 0.12) 20%, transparent 29%);
+    filter: blur(9px);
+    animation: waterLightDrift 34s ease-in-out -12s infinite alternate-reverse;
+}
+@keyframes waterLightDrift {
+    from { transform: translate(-8px, -5px) rotate(-2deg); opacity: 0.55; }
+    to { transform: translate(12px, 8px) rotate(2deg); opacity: 0.85; }
+}
+
+/* =========================
+   LILY PAD
+   ========================= */
+
+.lily-pad {
+    position: absolute;
+
+    width: 235px;
+    height: 160px;
+
+    left: 445px;
+    top: 165px;
+
+    border-radius:
+        48% 52% 48% 52% /
+        52% 46% 54% 48%;
+
+    background:
+        radial-gradient(
+            circle at 47% 52%,
+            rgba(205, 225, 180, 0.35) 0%,
+            rgba(150, 190, 130, 0.15) 22%,
+            transparent 42%
+        ),
+        linear-gradient(
+            145deg,
+            #88ad79 0%,
+            #729d6c 35%,
+            #5d8d63 70%,
+            #4e7d5b 100%
+        );
+
+    box-shadow:
+        0 5px 9px rgba(35, 95, 95, 0.10),
+        0 13px 24px rgba(35, 95, 95, 0.13),
+        inset 8px 7px 18px rgba(255, 255, 230, 0.13),
+        inset -8px -6px 16px rgba(45, 95, 60, 0.12);
+
+    overflow: hidden;
+
+    z-index: 3;
+
+    transform: rotate(-3deg);
+}
+
+
+/* =========================
+   CENTER OF THE LEAF
+   ========================= */
+
+.leaf-center {
+    position: absolute;
+
+    width: 13px;
+    height: 13px;
+
+    left: 111px;
+    top: 75px;
+
+    border-radius: 50%;
+
+    background: rgba(70, 115, 72, 0.55);
+
+    box-shadow:
+        0 0 8px rgba(230, 240, 190, 0.25);
+
+    z-index: 2;
+}
+
+
+/* =========================
+   LEAF VEINS
+   ========================= */
+
+.vein {
+    position: absolute;
+
+    width: 105px;
+    height: 1.5px;
+
+    left: 117px;
+    top: 81px;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(215, 225, 175, 0.65),
+            rgba(215, 225, 175, 0.05)
+        );
+
+    transform-origin: left center;
+
+    border-radius: 50%;
+
+    opacity: 0.75;
+
+    z-index: 1;
+}
+
+
+.vein-1 {
+    transform: rotate(-75deg);
+}
+
+.vein-2 {
+    transform: rotate(-48deg);
+}
+
+.vein-3 {
+    transform: rotate(-23deg);
+}
+
+.vein-4 {
+    transform: rotate(2deg);
+}
+
+.vein-5 {
+    transform: rotate(28deg);
+}
+
+.vein-6 {
+    transform: rotate(53deg);
+}
+
+.vein-7 {
+    transform: rotate(78deg);
+}
+
+
+/* =========================
+   SECOND HALF OF THE VEINS
+   ========================= */
+
+.lily-pad::before {
+    content: "";
+
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+
+    left: 18px;
+    top: 31px;
+
+    border-radius: 50%;
+
+    background:
+        repeating-conic-gradient(
+            from 5deg at 100% 50%,
+            rgba(220, 230, 185, 0.22) 0deg 1deg,
+            transparent 1deg 24deg
+        );
+
+    opacity: 0.7;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   SOFT HIGHLIGHT
+   ========================= */
+
+.lily-pad::after {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 90px;
+
+    left: 18px;
+    top: 8px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255, 250, 215, 0.16),
+            transparent 68%
+        );
+
+    pointer-events: none;
+}
+.lotus-stem {
+    position: absolute;
+
+    width: 9px;
+    height: 55px;
+
+    left: 560px;
+    top: 175px;
+
+    background: linear-gradient(
+        to right,
+        #3f8d5b,
+        #72b879,
+        #3f8d5b
+    );
+
+    border-radius: 10px;
+
+    z-index: 3;
+}
+
+/* =========================
+   LOTUS FLOWER
+   ========================= */
+
+.lotus {
+    position: absolute;
+
+    width: 140px;
+    height: 135px;
+
+    left: 495px;
+    top: 92px;
+
+    transform: scale(1.15);
+    transform-origin: bottom center;
+
+    z-index: 4;
+}
+
+
+/* ---------- 所有花瓣共同样式 ---------- */
+
+.petal {
+    position: absolute;
+
+    left: 46px;
+    top: 28px;
+
+    width: 48px;
+    height: 88px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(210, 75, 115, 0.16),
+            rgba(255, 255, 255, 0.22) 45%,
+            rgba(210, 75, 115, 0.10)
+        ),
+        linear-gradient(
+            to top,
+            #e97b9f 0%,
+            #f6abc0 55%,
+            #ffe1e8 100%
+        );
+
+    /* 圆润的花瓣，不再用硬邦邦的 polygon */
+    border-radius:
+        50% 50% 46% 46% /
+        38% 38% 62% 62%;
+
+    transform-origin: bottom center;
+
+    box-shadow:
+        inset 5px 0 8px rgba(255,255,255,0.16),
+        inset -5px 0 8px rgba(205,80,120,0.08);
+
+    transition:
+        transform 1.2s ease,
+        width 1.2s ease,
+        height 1.2s ease,
+        top 1.2s ease,
+        left 1.2s ease,
+        opacity 0.7s ease;
+}
+
+/* ---------- 后层 ---------- */
+
+/* ===== 后层花瓣 ===== */
+
+.petal-back-left {
+    width: 47px;
+    height: 94px;
+
+    transform:
+        translate(-24px, 4px)
+        rotate(-27deg);
+
+    opacity: 0.88;
+}
+
+.petal-back-center {
+    width: 46px;
+    height: 104px;
+
+    top: 13px;
+
+    transform: scale(0.92);
+
+    background:
+        linear-gradient(
+            to top,
+            #ed87a6,
+            #f8bbcb 58%,
+            #ffe6eb
+        );
+}
+
+.petal-back-right {
+    width: 47px;
+    height: 94px;
+
+    transform:
+        translate(24px, 4px)
+        rotate(27deg);
+
+    opacity: 0.88;
+}
+
+
+/* ===== 外层展开花瓣 ===== */
+
+.petal-outer-left {
+    width: 62px;
+    height: 82px;
+
+    left: 39px;
+    top: 43px;
+
+    transform:
+        translate(-39px, 8px)
+        rotate(-48deg);
+
+    border-radius:
+        58% 45% 55% 48% /
+        42% 40% 60% 58%;
+
+    background:
+        linear-gradient(
+            to top,
+            #df7398,
+            #f2a1b8 55%,
+            #ffd6df
+        );
+}
+
+.petal-outer-right {
+    width: 62px;
+    height: 82px;
+
+    left: 39px;
+    top: 43px;
+
+    transform:
+        translate(39px, 8px)
+        rotate(48deg);
+
+    border-radius:
+        45% 58% 48% 55% /
+        40% 42% 58% 60%;
+
+    background:
+        linear-gradient(
+            to top,
+            #df7398,
+            #f2a1b8 55%,
+            #ffd6df
+        );
+}
+
+/* ===== 前层向下展开的三片花瓣 ===== */
+
+.petal-front-left {
+    width: 58px;
+    height: 78px;
+
+    left: 39px;
+    top: 62px;
+
+    transform:
+        translate(-27px, 4px)
+        rotate(-32deg);
+
+    background:
+        linear-gradient(
+            to top,
+            #df7398,
+            #f4a8bd 58%,
+            #ffdae3
+        );
+
+    z-index: 6;
+}
+
+
+.petal-front-center {
+    width: 54px;
+    height: 82px;
+
+    left: 43px;
+    top: 66px;
+
+    transform:
+        translateY(7px)
+        rotate(0deg);
+
+    background:
+        linear-gradient(
+            to top,
+            #dc6d94,
+            #f3a3ba 58%,
+            #ffdde5
+        );
+
+    z-index: 7;
+}
+
+
+.petal-front-right {
+    width: 58px;
+    height: 78px;
+
+    left: 43px;
+    top: 62px;
+
+    transform:
+        translate(27px, 4px)
+        rotate(32deg);
+
+    background:
+        linear-gradient(
+            to top,
+            #df7398,
+            #f4a8bd 58%,
+            #ffdae3
+        );
+
+    z-index: 6;
+}
+
+/* ===== 中层 ===== */
+
+.petal-mid-left {
+    width: 50px;
+    height: 90px;
+
+    transform:
+        translate(-22px, 16px)
+        rotate(-30deg);
+}
+
+.petal-mid-right {
+    width: 50px;
+    height: 90px;
+
+    transform:
+        translate(22px, 16px)
+        rotate(30deg);
+}
+
+
+/* ===== 内层 ===== */
+
+.petal-inner-left {
+    width: 40px;
+    height: 84px;
+
+    left: 50px;
+    top: 30px;
+
+    transform:
+        translate(-12px, 7px)
+        rotate(-15deg);
+
+    background:
+        linear-gradient(
+            to top,
+            #e87a9e,
+            #f8bdcc 60%,
+            #ffe8ed
+        );
+}
+
+.petal-inner-right {
+    width: 40px;
+    height: 84px;
+
+    left: 50px;
+    top: 30px;
+
+    transform:
+        translate(12px, 7px)
+        rotate(15deg);
+
+    background:
+        linear-gradient(
+            to top,
+            #e87a9e,
+            #f8bdcc 60%,
+            #ffe8ed
+        );
+}
+
+.petal-center {
+    width: 38px;
+    height: 91px;
+
+    left: 51px;
+    top: 22px;
+
+    transform: scale(0.88);
+
+    background:
+        linear-gradient(
+            to top,
+            #e67398,
+            #f5aec1 58%,
+            #ffeaee
+        );
+}
+
+/* ---------- 莲蓬 ---------- */
+
+.lotus-center {
+    position: absolute;
+
+    width: 30px;
+    height: 22px;
+
+    left: 55px;
+    top: 88px;
+
+    border-radius: 50% 50% 45% 45%;
+
+    background:
+        radial-gradient(
+            circle at 30% 35%,
+            #9b7c45 0 2px,
+            transparent 3px
+        ),
+        radial-gradient(
+            circle at 65% 40%,
+            #9b7c45 0 2px,
+            transparent 3px
+        ),
+        radial-gradient(
+            circle at 50% 70%,
+            #9b7c45 0 2px,
+            transparent 3px
+        ),
+        #e7c86e;
+
+    box-shadow:
+        0 2px 4px rgba(120, 90, 40, 0.15);
+
+    z-index: 10;
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.8s ease;
+}
+
+
+/* =========================
+   FLOWER BUD
+   ========================= */
+
+.lotus.closed .petal {
+    width: 38px;
+    height: 98px;
+
+    left: 51px;
+    top: 18px;
+
+    border-radius:
+        50% 50% 45% 45% /
+        32% 32% 68% 68%;
+}
+
+
+/* 后层包起来 */
+
+.lotus.closed .petal-back-left {
+    transform:
+        translate(-7px, 2px)
+        rotate(-8deg)
+        scaleX(0.82);
+}
+
+.lotus.closed .petal-back-center {
+    transform:
+        translateY(-3px)
+        scaleX(0.78);
+}
+
+.lotus.closed .petal-back-right {
+    transform:
+        translate(7px, 2px)
+        rotate(8deg)
+        scaleX(0.82);
+}
+
+
+/* 外层向中央收 */
+
+.lotus.closed .petal-outer-left {
+    transform:
+        translate(-10px, 3px)
+        rotate(-12deg)
+        scaleX(0.72);
+
+    border-radius: 50%;
+}
+
+.lotus.closed .petal-outer-right {
+    transform:
+        translate(10px, 3px)
+        rotate(12deg)
+        scaleX(0.72);
+
+    border-radius: 50%;
+}
+
+
+/* 中层 */
+
+.lotus.closed .petal-mid-left {
+    transform:
+        translate(-6px, -3px)
+        rotate(-7deg)
+        scaleX(0.75);
+}
+
+.lotus.closed .petal-mid-right {
+    transform:
+        translate(6px, -3px)
+        rotate(7deg)
+        scaleX(0.75);
+}
+
+
+/* 内层 */
+
+.lotus.closed .petal-inner-left {
+    transform:
+        translate(-4px, -8px)
+        rotate(-4deg)
+        scaleX(0.72);
+}
+
+.lotus.closed .petal-inner-right {
+    transform:
+        translate(4px, -8px)
+        rotate(4deg)
+        scaleX(0.72);
+}
+
+.lotus.closed .petal-center {
+    transform:
+        translateY(-12px)
+        scaleX(0.68)
+        scaleY(1.08);
+}
+
+
+/* 花苞时莲蓬消失 */
+
+.lotus.closed .lotus-center {
+    opacity: 0;
+
+    transform:
+        translateY(-10px)
+        scale(0.5);
+}
+
+.lotus.closed .petal-front-left {
+    transform:
+        translate(-7px, -18px)
+        rotate(-9deg)
+        scaleX(0.72);
+}
+
+.lotus.closed .petal-front-center {
+    transform:
+        translateY(-20px)
+        scaleX(0.68);
+}
+
+.lotus.closed .petal-front-right {
+    transform:
+        translate(7px, -18px)
+        rotate(9deg)
+        scaleX(0.72);
+}
+
+/* ========================================
+   PINK KOI FISH
+   ======================================== */
+
+
+/* ---------- 整条鱼 ---------- */
+
+.fish {
+    /* A faint underwater shadow follows the existing movement unchanged. */
+    filter: drop-shadow(0 5px 6px rgba(43, 116, 133, 0.12));
+    position: absolute;
+
+    width: 155px;
+    height: 70px;
+    scale: 0.82;
+
+    left: 100px;
+    top: 280px;
+
+    z-index: 2;
+
+    animation: swim 9s ease-in-out infinite;
+}
+
+
+/* ========================================
+   BODY
+   ======================================== */
+
+.fish-body {
+    position: absolute;
+
+    width: 112px;
+    height: 38px;
+
+    left: 34px;
+    top: 16px;
+
+    /*
+       前面圆润，尾部稍微收窄，
+       让身体比之前更像修长锦鲤
+    */
+    border-radius:
+        58% 48% 48% 58% /
+        50% 45% 55% 50%;
+
+    background:
+        radial-gradient(
+            ellipse at 72% 25%,
+            rgba(255, 255, 255, 0.48),
+            transparent 24%
+        ),
+        linear-gradient(
+            to right,
+            #f9bccd 0%,
+            #f6a8be 40%,
+            #f29ab4 70%,
+            #ec88a8 100%
+        );
+
+    box-shadow:
+        inset 0 -6px 10px rgba(205, 90, 125, 0.10),
+        0 3px 7px rgba(50, 110, 130, 0.08);
+
+    z-index: 3;
+}
+
+
+/*
+   尾根。
+   用来让身体自然地接到大尾巴，
+   避免看起来像尾巴贴在身体后面。
+*/
+
+.fish-body::before {
+    content: "";
+
+    position: absolute;
+
+    width: 27px;
+    height: 27px;
+
+    left: -13px;
+    top: 5px;
+
+    border-radius: 50%;
+
+    background: #f9bccd;
+
+    transform: scaleX(0.72);
+}
+
+
+/* ========================================
+   EYE
+   ======================================== */
+
+.fish-eye {
+    position: absolute;
+
+    width: 6px;
+    height: 6px;
+
+    right: 12px;
+    top: 10px;
+
+    border-radius: 50%;
+
+    background: #30272d;
+
+    box-shadow:
+        1px 1px 0 rgba(255, 255, 255, 0.7);
+
+    z-index: 6;
+}
+
+
+/* ========================================
+   SOFT SCALE DETAILS
+   ======================================== */
+
+.fish-scale {
+    position: absolute;
+
+    width: 18px;
+    height: 14px;
+
+    border-right:
+        1px solid rgba(255, 238, 244, 0.55);
+
+    border-radius: 50%;
+
+    opacity: 0.65;
+}
+
+
+.scale-1 {
+    left: 42px;
+    top: 8px;
+}
+
+
+.scale-2 {
+    left: 57px;
+    top: 17px;
+}
+
+
+.scale-3 {
+    left: 72px;
+    top: 8px;
+}
+
+
+/* ========================================
+   SMALL SILKY FINS
+   ======================================== */
+
+.fish-fin {
+    position: absolute;
+
+    width: 32px;
+    height: 18px;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(255, 255, 255, 0.90),
+            rgba(255, 239, 244, 0.65),
+            rgba(246, 180, 200, 0.15)
+        );
+
+    z-index: -1;
+}
+
+
+.fish-fin-top {
+    left: 50px;
+    top: -12px;
+
+    border-radius:
+        85% 20% 75% 25%;
+
+    transform:
+        rotate(-25deg)
+        skewX(-12deg);
+}
+
+
+.fish-fin-bottom {
+    left: 55px;
+    bottom: -12px;
+
+    border-radius:
+        25% 75% 20% 85%;
+
+    transform:
+        rotate(25deg)
+        skewX(12deg);
+}
+
+
+/* ========================================
+   LARGE FLOWING TAIL
+   ======================================== */
+
+.koi-tail {
+    position: absolute;
+
+    width: 92px;
+    height: 82px;
+
+    left: -44px;
+    top: -6px;
+
+    transform-origin: right center;
+
+    animation:
+        koiTailFlow 1.15s ease-in-out infinite alternate;
+
+    z-index: 1;
+}
+
+
+/*
+   三片尾鳍共同样式。
+
+   重点：
+   靠近身体的右侧比较窄，
+   向左越来越宽，像花瓣散开。
+*/
+
+.tail-petal {
+    position: absolute;
+
+    right: 0;
+
+    width: 78px;
+    height: 40px;
+
+    transform-origin: right center;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(255, 255, 255, 0.96) 0%,
+            rgba(255, 250, 251, 0.90) 30%,
+            rgba(255, 235, 241, 0.58) 65%,
+            rgba(255, 225, 234, 0.10) 100%
+        );
+
+    box-shadow:
+        inset 0 0 8px rgba(255, 255, 255, 0.30);
+}
+
+
+/* 上层尾巴 */
+
+.tail-petal-top {
+    top: 3px;
+
+    border-radius:
+        90% 18% 75% 30% /
+        75% 25% 70% 30%;
+
+    transform:
+        rotate(-35deg)
+        scaleX(1.08);
+
+    opacity: 0.82;
+}
+
+
+/* 中间最大的一片 */
+
+.tail-petal-center {
+    width: 88px;
+    height: 43px;
+
+    top: 20px;
+
+    border-radius:
+        92% 18% 82% 25% /
+        55% 45% 58% 42%;
+
+    transform:
+        scaleX(1.08);
+
+    opacity: 0.92;
+}
+
+
+/* 下层尾巴 */
+
+.tail-petal-bottom {
+    top: 40px;
+
+    border-radius:
+        30% 75% 18% 90% /
+        30% 70% 25% 75%;
+
+    transform:
+        rotate(35deg)
+        scaleX(1.08);
+
+    opacity: 0.82;
+}
+
+
+/* ========================================
+   TAIL MOVEMENT
+   ======================================== */
+
+@keyframes koiTailFlow {
+
+    from {
+        transform:
+            rotate(-8deg)
+            scaleY(0.92);
+    }
+
+    to {
+        transform:
+            rotate(8deg)
+            scaleY(1.08);
+    }
+}
+
+
+/* ========================================
+   NORMAL SWIMMING
+   ======================================== */
+
+@keyframes swim {
+
+    0% {
+        left: 100px;
+        top: 280px;
+
+        transform: rotate(0deg);
+    }
+
+    20% {
+        left: 240px;
+        top: 180px;
+
+        transform: rotate(-8deg);
+    }
+
+    42% {
+        left: 470px;
+        top: 220px;
+
+        transform: rotate(5deg);
+    }
+
+    58% {
+        left: 520px;
+        top: 320px;
+
+        transform: rotate(12deg);
+    }
+
+    75% {
+        left: 300px;
+        top: 355px;
+
+        transform: rotate(180deg);
+    }
+
+    100% {
+        left: 100px;
+        top: 280px;
+
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ========================================
+   HAND NEAR:
+   SWIM UNDER THE LILY PAD
+   ======================================== */
+
+.fish.hiding {
+    animation:
+        hideFish 1.3s ease-in-out forwards;
+}
+
+
+@keyframes hideFish {
+
+    0% {
+        left: 300px;
+        top: 280px;
+    }
+
+    55% {
+        left: 420px;
+        top: 245px;
+
+        transform: rotate(-8deg);
+    }
+
+    100% {
+        left: 505px;
+        top: 205px;
+
+        transform: rotate(0deg);
+    }
+}
+
+
+/* ========================================
+   HAND FAR:
+   COME OUT FROM UNDER THE LEAF
+   ======================================== */
+
+.fish.coming-out {
+    animation:
+        comeOut 2s ease-in-out forwards;
+}
+
+
+@keyframes comeOut {
+
+    0% {
+        left: 505px;
+        top: 205px;
+
+        transform: rotate(180deg);
+    }
+
+    35% {
+        left: 430px;
+        top: 230px;
+
+        transform: rotate(180deg);
+    }
+
+    70% {
+        left: 260px;
+        top: 250px;
+
+        transform: rotate(180deg);
+    }
+
+    100% {
+        left: 100px;
+        top: 280px;
+
+        transform: rotate(180deg);
+    }
+}
+
+.ripple {
+    position: absolute;
+
+    width: 80px;
+    height: 35px;
+
+    border: 1px solid rgba(245, 255, 252, 0.28);
+    border-right-color: rgba(245, 255, 252, 0.18);
+    border-bottom-color: rgba(245, 255, 252, 0.20);
+    border-radius: 48% 52% 46% 54%;
+    filter: blur(0.25px);
+    pointer-events: none;
+
+    opacity: 0;
+
+    z-index: 1;
+
+    animation: rippleMove 8s ease-out infinite;
+}
+
+.ripple-one {
+    left: 120px;
+    top: 130px;
+}
+
+.ripple-two {
+    left: 360px;
+    top: 330px;
+
+    animation-delay: -2.8s;
+}
+
+.ripple-three {
+    left: 620px;
+    top: 100px;
+
+    animation-delay: -5.5s;
+}
+
+@keyframes rippleMove {
+
+    0% {
+        transform: scale(0.6) rotate(-6deg);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.65;
+    }
+
+    100% {
+        transform: scale(1.9) rotate(3deg);
+        opacity: 0;
+    }
+}
+
+/* Keep the atmosphere still when reduced motion is preferred. */
+@media (prefers-reduced-motion: reduce) {
+    .pond::before, .pond::after { animation: none; }
+    .ripple { animation: none; opacity: 0.1; }
+}
+
+/* Music control: retain its fixed top-right anchor. */
+#sound-toggle {
+    min-height: 36px;
+    padding: 6px 15px;
+    border: 1px solid rgba(155, 181, 154, 0.25);
+    border-radius: 12px;
+    background: #f3f2e9;
+    color: #82917c;
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+#sound-toggle[aria-pressed="true"] {
+    background: #e3ebde;
+    color: #587454;
+    border-color: rgba(155, 181, 154, 0.4);
+}
+#sound-toggle:hover { background: #eaf0e4; }
+#sound-toggle:focus-visible {
+    outline: 2px solid #9bb59a;
+    outline-offset: 3px;
+}
+</style>
+</head>
+
+<body>
+
+    <h1>In the Lotus Pond 🪷</h1>
+<p class="subtitle">Come a little closer and see how the pond responds.</p>
+    <div hidden>
+        <button id="closeButton">Close Flower</button>
+        <button id="openButton">Open Flower</button>
+        <button id="nearButton">Hand Near ✋</button>
+        <button id="farButton">Hand Far 👋</button>
+    </div>
+
+    <main class="main-layout">
+        <div class="artwork-frame">
+        <div class="pond-stage" aria-label="Interactive pond with a koi fish and lotus">
+    <div class="pond">
+        <div class="ripple ripple-one"></div>
+        <div class="ripple ripple-two"></div>
+        <div class="ripple ripple-three"></div>
+        <div class="fish">
+
+    <!-- 飘逸的三片尾鳍 -->
+    <div class="koi-tail">
+        <div class="tail-petal tail-petal-top"></div>
+        <div class="tail-petal tail-petal-center"></div>
+        <div class="tail-petal tail-petal-bottom"></div>
+    </div>
+
+    <!-- 鱼的身体 -->
+    <div class="fish-body">
+
+        <!-- 上下鱼鳍 -->
+        <div class="fish-fin fish-fin-top"></div>
+        <div class="fish-fin fish-fin-bottom"></div>
+
+        <!-- 身体上的淡淡鳞片 -->
+        <div class="fish-scale scale-1"></div>
+        <div class="fish-scale scale-2"></div>
+        <div class="fish-scale scale-3"></div>
+
+        <!-- 眼睛 -->
+        <div class="fish-eye"></div>
+
+    </div>
+
+</div>
+        <div class="lily-pad">
+    <div class="leaf-center"></div>
+
+    <div class="vein vein-1"></div>
+    <div class="vein vein-2"></div>
+    <div class="vein vein-3"></div>
+    <div class="vein vein-4"></div>
+    <div class="vein vein-5"></div>
+    <div class="vein vein-6"></div>
+    <div class="vein vein-7"></div>
+</div>
+        <div class="lotus-stem"></div>
+        <div class="lotus">
+
+    <!-- 最后面的大花瓣 -->
+    <div class="petal petal-back-left"></div>
+    <div class="petal petal-back-center"></div>
+    <div class="petal petal-back-right"></div>
+
+    <!-- 外层展开花瓣 -->
+    <div class="petal petal-outer-left"></div>
+    <div class="petal petal-outer-right"></div>
+
+    <!-- 中层花瓣 -->
+    <div class="petal petal-mid-left"></div>
+    <div class="petal petal-mid-right"></div>
+
+    <!-- 内层花瓣 -->
+    <div class="petal petal-inner-left"></div>
+    <div class="petal petal-inner-right"></div>
+    <div class="petal petal-center"></div>
+    
+
+    <!-- 莲蓬 -->
+    <div class="lotus-center"></div>
+
+</div>
+
+</div>
+
+        </div>
+        </div>
+        <aside class="interaction-panel" aria-labelledby="interaction-title">
+            <h2 class="camera-label" id="interaction-title"><span class="camera-dot" aria-hidden="true"></span>Live Interaction</h2>
+            <div id="webcam-container" aria-label="Live webcam preview"></div>
+            <p class="interaction-hint" id="camera-message">Move your hand closer to the camera<br>and watch the pond respond.</p>
+            <div class="prediction">
+                <div class="prediction-label"><span id="near-label">Hand Near</span><output id="near-percentage">0%</output></div>
+                <div class="prediction-track" id="near-progress" role="progressbar" aria-labelledby="near-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="prediction-fill near-fill" id="near-fill"></div></div>
+            </div>
+            <div class="prediction">
+                <div class="prediction-label"><span id="far-label">Hand Far</span><output id="far-percentage">0%</output></div>
+                <div class="prediction-track" id="far-progress" role="progressbar" aria-labelledby="far-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="prediction-fill far-fill" id="far-fill"></div></div>
+            </div>
+            <div class="pond-status"><span>Pond Status</span><span class="status-badge" id="pond-status" role="status">SAFE</span></div>
+        </aside>
+    </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+<script>
+    let model;
+    let webcam;
+    let fishIsHidden = false;
+    // Temporary diagnostics: set false after checking the browser console.
+    const DEBUG_PREDICTIONS = true;
+    let lastPredictionLog = -Infinity;
+    let previousPredictionBand;
+
+async function initAI() {
+
+    const modelURL = "./model/model.json";
+    const metadataURL = "./model/metadata.json";
+
+    model = await tmImage.load(modelURL, metadataURL);
+
+    webcam = new tmImage.Webcam(200, 200, true);
+
+    await webcam.setup();
+    await webcam.play();
+
+    document
+        .getElementById("webcam-container")
+        .appendChild(webcam.canvas);
+    window.requestAnimationFrame(loop);
+}
+async function loop() {
+
+    webcam.update();
+
+    const predictions = await model.predict(webcam.canvas);
+
+    const handNear = predictions.find(prediction => prediction.className === "Hand Near")?.probability ?? 0;
+    const handFar = predictions.find(prediction => prediction.className === "Hand Far")?.probability ?? 0;
+
+    if (DEBUG_PREDICTIONS) {
+        const now = performance.now();
+        const predictionBand = handNear > 0.85 ? "NEAR" : handFar > 0.85 ? "FAR" : "BELOW_THRESHOLD";
+        // Log every threshold crossing, plus a sample twice per second.
+        if (now - lastPredictionLog >= 500 || predictionBand !== previousPredictionBand) {
+            console.log("[Pond predictions]", {
+                timeMs: Math.round(now),
+                handNear: Number(handNear.toFixed(4)),
+                handFar: Number(handFar.toFixed(4)),
+                predictionBand,
+                fishIsHidden,
+                wouldHide: handNear > 0.85 && !fishIsHidden,
+                wouldExit: handFar > 0.85 && fishIsHidden,
+                fishClasses: fish.className
+            });
+            lastPredictionLog = now;
+            previousPredictionBand = predictionBand;
+        }
+    }
+
+    updatePrediction("near", handNear);
+    updatePrediction("far", handFar);
+
+    if (handNear > 0.85 && !fishIsHidden) setPondHidden(true);
+    if (handFar > 0.85 && fishIsHidden) setPondHidden(false);
+
+    window.requestAnimationFrame(loop);
+}
+
+    const lotus = document.querySelector(".lotus");
+
+    const fish = document.querySelector(".fish");
+    const nearButton = document.querySelector("#nearButton");
+    const farButton = document.querySelector("#farButton");
+    const closeButton = document.querySelector("#closeButton");
+    const openButton = document.querySelector("#openButton");
+
+
+    closeButton.addEventListener("click", function () {
+
+        lotus.classList.add("closed");
+
+    });
+
+
+    openButton.addEventListener("click", function () {
+
+        lotus.classList.remove("closed");
+
+    });
+
+    let comeOutTimer;
+    const pondStatus = document.getElementById("pond-status");
+
+    function updatePrediction(name, probability) {
+        const percentage = Math.round(Math.min(1, Math.max(0, probability)) * 100);
+        document.getElementById(`${name}-fill`).style.width = `${percentage}%`;
+        document.getElementById(`${name}-percentage`).textContent = `${percentage}%`;
+        document.getElementById(`${name}-progress`).setAttribute("aria-valuenow", percentage);
+    }
+
+    function setPondHidden(hidden) {
+        clearTimeout(comeOutTimer);
+        if (DEBUG_PREDICTIONS) {
+            console.log("[Pond transition]", {
+                timeMs: Math.round(performance.now()),
+                from: fishIsHidden ? "HIDING" : "SAFE",
+                to: hidden ? "HIDING" : "SAFE"
+            });
+        }
+        fishIsHidden = hidden;
+        fish.classList.toggle("hiding", hidden);
+        fish.classList.toggle("coming-out", !hidden);
+        lotus.classList.toggle("closed", hidden);
+        pondStatus.textContent = hidden ? "HIDING" : "SAFE";
+        pondStatus.classList.toggle("is-hiding", hidden);
+        if (!hidden) {
+            comeOutTimer = setTimeout(() => fish.classList.remove("coming-out"), 2000);
+        }
+    }
+
+    nearButton.addEventListener("click", () => setPondHidden(true));
+    farButton.addEventListener("click", () => setPondHidden(false));
+
+    const pondStage = document.querySelector(".pond-stage");
+    const pond = document.querySelector(".pond");
+    function resizePond() {
+        pond.style.transform = `scale(${pondStage.clientWidth / 800})`;
+    }
+    new ResizeObserver(resizePond).observe(pondStage);
+    resizePond();
+
+    initAI().catch(error => {
+        console.error("Could not start pond webcam interaction:", error);
+        document.getElementById("camera-message").textContent = "Camera unavailable. Please allow camera access and reload to interact.";
+    });
+
+</script>
+
+
+<audio id="water-ambience" src="./pond-water.wav" loop preload="none"></audio>
+<button id="sound-toggle" type="button" aria-label="Turn water sound on" aria-pressed="false" style="position: fixed; top: 12px; right: 12px; z-index: 10;">Music ♫</button>
+
+<script>
+(() => {
+    const audio = document.getElementById("water-ambience");
+    const button = document.getElementById("sound-toggle");
+    const backgroundVolume = 0.3;
+    let soundOn = false;
+    let fadeFrame;
+    audio.volume = 0;
+
+    function updateSoundButton() {
+        button.textContent = "Music ♫";
+        button.setAttribute("aria-pressed", String(soundOn));
+        button.setAttribute("aria-label", soundOn ? "Turn water sound off" : "Turn water sound on");
+    }
+
+    function fadeTo(target) {
+        cancelAnimationFrame(fadeFrame);
+        const startVolume = audio.volume;
+        const started = performance.now();
+        function step(now) {
+            const progress = Math.min((now - started) / 450, 1);
+            audio.volume = startVolume + (target - startVolume) * progress;
+            if (progress < 1) fadeFrame = requestAnimationFrame(step);
+            else if (!soundOn) audio.pause();
+        }
+        fadeFrame = requestAnimationFrame(step);
+    }
+
+    button.addEventListener("click", async () => {
+        if (soundOn) {
+            soundOn = false;
+            updateSoundButton();
+            fadeTo(0);
+            return;
+        }
+        cancelAnimationFrame(fadeFrame);
+        button.disabled = true;
+        try {
+            // Playback is requested only in response to this click.
+            await audio.play();
+            soundOn = true;
+            updateSoundButton();
+            fadeTo(backgroundVolume);
+        } catch (error) {
+            soundOn = false;
+            updateSoundButton();
+            console.warn("Water ambience could not start:", error);
+        } finally {
+            button.disabled = false;
+        }
+    });
+})();
+</script>
+</body>
+</html>
