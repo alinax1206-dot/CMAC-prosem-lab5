@@ -15,16 +15,18 @@
 
     background:
         radial-gradient(
-            ellipse at 22% 12%,
-            rgba(240, 189, 203, 0.23) 0%,
-            rgba(240, 189, 203, 0.09) 26%,
-            transparent 62%
+            ellipse at 25% 16%,
+            rgba(239, 217, 216, 0.73) 0%,
+            rgba(239, 217, 216, 0.35) 34%,
+            rgba(239, 217, 216, 0.10) 60%,
+            transparent 82%
         ),
         radial-gradient(
-            ellipse at 88% 88%,
-            rgba(177, 198, 166, 0.22) 0%,
-            rgba(177, 198, 166, 0.08) 28%,
-            transparent 66%
+            ellipse at 86% 88%,
+            rgba(220, 230, 216, 0.79) 0%,
+            rgba(220, 230, 216, 0.38) 34%,
+            rgba(220, 230, 216, 0.11) 60%,
+            transparent 84%
         ),
         #f7f3ed;
 
@@ -42,6 +44,19 @@
     padding: 40px 20px 70px;
 
     box-sizing: border-box;
+    isolation: isolate;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='17'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
 h1 {
@@ -87,7 +102,7 @@ body > .subtitle {
     align-items: center;
     gap: 36px;
     max-width: 1198px;
-    margin: 36px auto 0;
+    margin: -10px auto 0;
 }
 .artwork-frame {
     min-width: 0;
@@ -98,8 +113,8 @@ body > .subtitle {
     border-radius: 18px;
     background: #fbf8f1;
     box-shadow:
-        0 3px 8px rgba(102, 91, 72, 0.025),
-        0 18px 42px rgba(102, 91, 72, 0.045);
+        0 2px 10px rgba(122, 109, 88, 0.018),
+        0 10px 46px rgba(122, 109, 88, 0.028);
 }
 .artwork-frame::before {
     content: "";
@@ -120,7 +135,9 @@ body > .subtitle {
     transform-origin: top left;
 }
 .interaction-panel {
-    padding: 24px;
+    width: 112%;
+    box-sizing: border-box;
+    padding: 20px 28px;
     border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 28px;
     background: rgba(255, 253, 249, 0.85);
@@ -148,9 +165,9 @@ body > .subtitle {
     box-shadow: 0 0 0 4px rgba(233, 155, 177, 0.13);
 }
 #webcam-container {
-    width: 150px;
-    height: 150px;
-    margin: 22px auto 16px;
+    width: 160px;
+    height: 160px;
+    margin: 16px auto 14px;
     border: 5px solid white;
     border-radius: 22px;
     overflow: hidden;
@@ -164,14 +181,14 @@ body > .subtitle {
     object-fit: cover;
 }
 .interaction-hint {
-    margin: 0 0 24px;
+    margin: 0 0 16px;
     text-align: center;
     font-size: 12px;
     font-weight: 400;
     line-height: 1.7;
     color: #7d8c85;
 }
-.prediction { margin-top: 16px; }
+.prediction { margin-top: 14px; }
 .prediction-label {
     display: flex;
     justify-content: space-between;
@@ -203,8 +220,8 @@ body > .subtitle {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-top: 24px;
-    padding-top: 18px;
+    margin-top: 18px;
+    padding-top: 14px;
     border-top: 1px solid #e9ede5;
     font-size: 12px;
     color: #7d8c85;
@@ -232,10 +249,10 @@ body > .subtitle {
         width: 800px;
         height: 500px;
         background:
-            radial-gradient(ellipse at 27% 19%, rgba(241, 255, 252, 0.55), transparent 43%),
-            radial-gradient(ellipse at 78% 72%, rgba(123, 211, 222, 0.42), transparent 48%),
-            radial-gradient(ellipse at 54% 112%, rgba(51, 122, 144, 0.24), transparent 60%),
-            linear-gradient(155deg, #b9edf3 0%, #91dce6 32%, #6bc3d7 68%, #83d3de 100%);
+            radial-gradient(ellipse at 24% 16%, rgba(224, 245, 247, 0.52) 0%, rgba(224, 245, 247, 0.16) 32%, transparent 65%),
+            radial-gradient(ellipse at 71% 43%, rgba(188, 218, 205, 0.18) 0%, rgba(188, 218, 205, 0.05) 36%, transparent 72%),
+            radial-gradient(ellipse at 83% 94%, rgba(100, 142, 163, 0.23) 0%, rgba(100, 142, 163, 0.07) 38%, transparent 74%),
+            linear-gradient(155deg, #c0e8ee 0%, #a1d8e3 32%, #85c2d4 68%, #96ceda 100%);
         border-radius: 50%;
         margin: 18px auto 0;
         position: relative;
@@ -289,30 +306,41 @@ body > .subtitle {
     left: 445px;
     top: 165px;
 
-    border-radius:
-        48% 52% 48% 52% /
-        52% 46% 54% 48%;
+    border-radius: 0;
+    clip-path: shape(
+        from 47% 1%,
+        curve to 10% 15% with 32% -1% / 19% 3%,
+        curve to 1% 49% with 2% 26% / -1% 38%,
+        curve to 15% 83% with 2% 64% / 6% 77%,
+        curve to 49% 97% with 25% 94% / 35% 96%,
+        curve to 80% 91% with 62% 98% / 72% 98%,
+        curve to 98% 65% with 89% 84% / 99% 79%,
+        curve to 94% 31% with 99% 52% / 99% 40%,
+        curve to 80% 17% with 90% 24% / 83% 26%,
+        curve to 68% 7% with 77% 10% / 74% 7%,
+        curve to 47% 1% with 61% 6% / 56% 1%,
+        close
+    );
 
     background:
         radial-gradient(
-            circle at 47% 52%,
-            rgba(205, 225, 180, 0.35) 0%,
-            rgba(150, 190, 130, 0.15) 22%,
-            transparent 42%
+            ellipse at 50% 51%,
+            rgba(92, 139, 110, 0.28) 0%,
+            rgba(123, 161, 132, 0.12) 24%,
+            transparent 62%
         ),
         linear-gradient(
             145deg,
-            #88ad79 0%,
-            #729d6c 35%,
-            #5d8d63 70%,
-            #4e7d5b 100%
+            rgba(186, 210, 174, 0.97) 0%,
+            rgba(163, 199, 171, 0.98) 35%,
+            rgba(148, 188, 164, 0.98) 70%,
+            rgba(170, 202, 178, 0.96) 100%
         );
 
     box-shadow:
-        0 5px 9px rgba(35, 95, 95, 0.10),
-        0 13px 24px rgba(35, 95, 95, 0.13),
-        inset 8px 7px 18px rgba(255, 255, 230, 0.13),
-        inset -8px -6px 16px rgba(45, 95, 60, 0.12);
+        0 5px 13px rgba(55, 94, 87, 0.08),
+        inset 7px 5px 18px rgba(245, 245, 216, 0.13),
+        inset -5px -4px 15px rgba(99, 135, 114, 0.06);
 
     overflow: hidden;
 
@@ -328,20 +356,13 @@ body > .subtitle {
 
 .leaf-center {
     position: absolute;
-
-    width: 13px;
-    height: 13px;
-
-    left: 111px;
-    top: 75px;
-
-    border-radius: 50%;
-
-    background: rgba(70, 115, 72, 0.55);
-
-    box-shadow:
-        0 0 8px rgba(230, 240, 190, 0.25);
-
+    width: 23px;
+    height: 17px;
+    left: 99px;
+    top: 74px;
+    border-radius: 42% 58% 53% 47%;
+    background: radial-gradient(ellipse, rgba(102, 139, 113, 0.12), transparent 72%);
+    box-shadow: none;
     z-index: 2;
 }
 
@@ -352,85 +373,78 @@ body > .subtitle {
 
 .vein {
     position: absolute;
-
     width: 105px;
-    height: 1.5px;
-
-    left: 117px;
+    height: 9px;
+    left: 110px;
     top: 81px;
-
-    background:
-        linear-gradient(
-            to right,
-            rgba(215, 225, 175, 0.65),
-            rgba(215, 225, 175, 0.05)
-        );
-
-    transform-origin: left center;
-
-    border-radius: 50%;
-
-    opacity: 0.75;
-
+    background: none;
+    border-top: 0.6px solid rgba(94, 130, 109, 0.32);
+    border-radius: 48% 65% 0 0 / 90% 100% 0 0;
+    mask-image: linear-gradient(to right, transparent, #000 14%, rgba(0, 0, 0, 0.6) 48%, transparent 94%);
+    transform-origin: left top;
+    opacity: 0.38;
     z-index: 1;
 }
 
-
 .vein-1 {
-    transform: rotate(-75deg);
+    width: 68px;
+    height: 6px;
+    transform: rotate(-86deg);
 }
 
 .vein-2 {
-    transform: rotate(-48deg);
+    width: 88px;
+    height: 12px;
+    top: 79px;
+    transform: rotate(-57deg);
 }
 
 .vein-3 {
-    transform: rotate(-23deg);
+    width: 112px;
+    height: 8px;
+    left: 112px;
+    transform: rotate(-19deg);
 }
 
 .vein-4 {
-    transform: rotate(2deg);
+    width: 106px;
+    height: 13px;
+    top: 83px;
+    transform: rotate(13deg);
 }
 
 .vein-5 {
-    transform: rotate(28deg);
+    width: 87px;
+    height: 7px;
+    transform: rotate(44deg);
 }
 
 .vein-6 {
-    transform: rotate(53deg);
+    width: 68px;
+    height: 11px;
+    left: 108px;
+    transform: rotate(79deg);
 }
 
 .vein-7 {
-    transform: rotate(78deg);
+    width: 78px;
+    height: 8px;
+    left: 109px;
+    top: 83px;
+    transform: rotate(131deg);
 }
 
-
-/* =========================
-   SECOND HALF OF THE VEINS
-   ========================= */
-
+/* Sparse curved veins and two short secondary branches. */
 .lily-pad::before {
     content: "";
-
     position: absolute;
-
-    width: 100px;
-    height: 100px;
-
-    left: 18px;
-    top: 31px;
-
-    border-radius: 50%;
-
-    background:
-        repeating-conic-gradient(
-            from 5deg at 100% 50%,
-            rgba(220, 230, 185, 0.22) 0deg 1deg,
-            transparent 1deg 24deg
-        );
-
-    opacity: 0.7;
-
+    width: 234px;
+    height: 162px;
+    left: 0;
+    top: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 234 162'%3E%3Cg fill='none' stroke='%235e826d' stroke-width='.6' stroke-linecap='round'%3E%3Cpath d='M109 82 Q77 84 17 69 M110 81 Q76 66 32 36 M110 80 Q98 51 78 13 M108 84 Q74 105 40 111'/%3E%3Cpath opacity='.55' d='M72 77 Q60 64 44 61 M89 54 Q74 49 65 37'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    mask-image: radial-gradient(ellipse at 47% 51%, transparent 2%, #000 17%, rgba(0, 0, 0, 0.5) 48%, transparent 73%);
+    opacity: 0.22;
     pointer-events: none;
 }
 
@@ -455,8 +469,8 @@ body > .subtitle {
     background:
         radial-gradient(
             ellipse,
-            rgba(255, 250, 215, 0.16),
-            transparent 68%
+            rgba(249, 247, 221, 0.12),
+            transparent 72%
         );
 
     pointer-events: none;
@@ -514,29 +528,29 @@ body > .subtitle {
     height: 88px;
 
     background:
-        linear-gradient(
-            90deg,
-            rgba(210, 75, 115, 0.16),
-            rgba(255, 255, 255, 0.22) 45%,
-            rgba(210, 75, 115, 0.10)
-        ),
-        linear-gradient(
-            to top,
-            #e97b9f 0%,
-            #f6abc0 55%,
-            #ffe1e8 100%
-        );
+        linear-gradient(100deg, rgba(163, 74, 103, 0.06), transparent 48%, rgba(163, 74, 103, 0.05)),
+        linear-gradient(to top, #f8ced8 0%, #f1abc0 56%, #df91aa 94%, #d88aa4 100%);
 
-    /* 圆润的花瓣，不再用硬邦邦的 polygon */
+    /* Soft tapered tips with a fine pigment edge. */
     border-radius:
-        50% 50% 46% 46% /
-        38% 38% 62% 62%;
+        49% 51% 44% 46% /
+        82% 80% 30% 32%;
+
+    clip-path: shape(
+        from 50% 0%,
+        curve to 94% 50% with 61% 13% / 94% 29%,
+        curve to 68% 98% with 94% 72% / 78% 92%,
+        curve to 32% 98% with 58% 100% / 42% 100%,
+        curve to 6% 50% with 22% 92% / 6% 72%,
+        curve to 50% 0% with 6% 29% / 39% 13%,
+        close
+    );
 
     transform-origin: bottom center;
 
     box-shadow:
-        inset 5px 0 8px rgba(255,255,255,0.16),
-        inset -5px 0 8px rgba(205,80,120,0.08);
+        inset 0 0 0 0.65px rgba(159, 76, 103, 0.17),
+        inset -3px 0 7px rgba(181, 91, 121, 0.05);
 
     transition:
         transform 1.2s ease,
@@ -560,6 +574,7 @@ body > .subtitle {
         rotate(-27deg);
 
     opacity: 0.88;
+    z-index: 1;
 }
 
 .petal-back-center {
@@ -570,13 +585,8 @@ body > .subtitle {
 
     transform: scale(0.92);
 
-    background:
-        linear-gradient(
-            to top,
-            #ed87a6,
-            #f8bbcb 58%,
-            #ffe6eb
-        );
+    background: linear-gradient(to top, #fbe1e7, #f5c4d2 65%, #e6a3b9);
+    z-index: 1;
 }
 
 .petal-back-right {
@@ -588,6 +598,7 @@ body > .subtitle {
         rotate(27deg);
 
     opacity: 0.88;
+    z-index: 1;
 }
 
 
@@ -604,17 +615,10 @@ body > .subtitle {
         translate(-39px, 8px)
         rotate(-48deg);
 
-    border-radius:
-        58% 45% 55% 48% /
-        42% 40% 60% 58%;
+    border-radius: 48% 52% 44% 46% / 80% 84% 34% 30%;
 
-    background:
-        linear-gradient(
-            to top,
-            #df7398,
-            #f2a1b8 55%,
-            #ffd6df
-        );
+    background: linear-gradient(to top, #f9d5df, #eeafc3 65%, #d88aa5);
+    z-index: 2;
 }
 
 .petal-outer-right {
@@ -628,86 +632,46 @@ body > .subtitle {
         translate(39px, 8px)
         rotate(48deg);
 
-    border-radius:
-        45% 58% 48% 55% /
-        40% 42% 58% 60%;
+    border-radius: 48% 52% 44% 46% / 80% 84% 34% 30%;
 
-    background:
-        linear-gradient(
-            to top,
-            #df7398,
-            #f2a1b8 55%,
-            #ffd6df
-        );
+    background: linear-gradient(to top, #f8d1dd, #f0b5c7 65%, #dc93ac);
+    z-index: 2;
 }
 
 /* ===== 前层向下展开的三片花瓣 ===== */
 
 .petal-front-left {
-    width: 58px;
-    height: 78px;
-
-    left: 39px;
-    top: 62px;
-
-    transform:
-        translate(-27px, 4px)
-        rotate(-32deg);
-
-    background:
-        linear-gradient(
-            to top,
-            #df7398,
-            #f4a8bd 58%,
-            #ffdae3
-        );
-
+    width: 60px;
+    height: 57px;
+    left: 38px;
+    top: 89px;
+    transform: translate(-19px, 0) rotate(-25deg);
+    border-radius: 48% 52% 43% 47% / 76% 80% 35% 32%;
+    background: linear-gradient(to top, #f4bfce, #edabc0 58%, #dc93ac);
     z-index: 6;
 }
 
 
 .petal-front-center {
-    width: 54px;
-    height: 82px;
-
-    left: 43px;
-    top: 66px;
-
-    transform:
-        translateY(7px)
-        rotate(0deg);
-
-    background:
-        linear-gradient(
-            to top,
-            #dc6d94,
-            #f3a3ba 58%,
-            #ffdde5
-        );
-
+    width: 59px;
+    height: 48px;
+    left: 41px;
+    top: 101px;
+    transform: translate(1px, 0) rotate(4deg);
+    border-radius: 48% 52% 43% 47% / 76% 80% 35% 32%;
+    background: linear-gradient(to top, #f4bfce, #edabc0 58%, #dc93ac);
     z-index: 7;
 }
 
 
 .petal-front-right {
-    width: 58px;
-    height: 78px;
-
-    left: 43px;
-    top: 62px;
-
-    transform:
-        translate(27px, 4px)
-        rotate(32deg);
-
-    background:
-        linear-gradient(
-            to top,
-            #df7398,
-            #f4a8bd 58%,
-            #ffdae3
-        );
-
+    width: 57px;
+    height: 59px;
+    left: 44px;
+    top: 88px;
+    transform: translate(20px, 1px) rotate(28deg);
+    border-radius: 48% 52% 43% 47% / 76% 80% 35% 32%;
+    background: linear-gradient(to top, #f4bfce, #edabc0 58%, #dc93ac);
     z-index: 6;
 }
 
@@ -720,6 +684,7 @@ body > .subtitle {
     transform:
         translate(-22px, 16px)
         rotate(-30deg);
+    z-index: 3;
 }
 
 .petal-mid-right {
@@ -729,6 +694,7 @@ body > .subtitle {
     transform:
         translate(22px, 16px)
         rotate(30deg);
+    z-index: 3;
 }
 
 
@@ -745,13 +711,8 @@ body > .subtitle {
         translate(-12px, 7px)
         rotate(-15deg);
 
-    background:
-        linear-gradient(
-            to top,
-            #e87a9e,
-            #f8bdcc 60%,
-            #ffe8ed
-        );
+    background: linear-gradient(to top, #fbe0e6, #f3bbcd 65%, #e5a1b7);
+    z-index: 4;
 }
 
 .petal-inner-right {
@@ -765,13 +726,8 @@ body > .subtitle {
         translate(12px, 7px)
         rotate(15deg);
 
-    background:
-        linear-gradient(
-            to top,
-            #e87a9e,
-            #f8bdcc 60%,
-            #ffe8ed
-        );
+    background: linear-gradient(to top, #fbe0e6, #f3bbcd 65%, #e5a1b7);
+    z-index: 4;
 }
 
 .petal-center {
@@ -783,13 +739,8 @@ body > .subtitle {
 
     transform: scale(0.88);
 
-    background:
-        linear-gradient(
-            to top,
-            #e67398,
-            #f5aec1 58%,
-            #ffeaee
-        );
+    background: linear-gradient(to top, #fbe3e8, #f5c2d1 65%, #e7a6bc);
+    z-index: 4;
 }
 
 /* ---------- 莲蓬 ---------- */
@@ -806,27 +757,15 @@ body > .subtitle {
     border-radius: 50% 50% 45% 45%;
 
     background:
-        radial-gradient(
-            circle at 30% 35%,
-            #9b7c45 0 2px,
-            transparent 3px
-        ),
-        radial-gradient(
-            circle at 65% 40%,
-            #9b7c45 0 2px,
-            transparent 3px
-        ),
-        radial-gradient(
-            circle at 50% 70%,
-            #9b7c45 0 2px,
-            transparent 3px
-        ),
-        #e7c86e;
+        radial-gradient(circle at 30% 35%, rgba(143, 119, 69, 0.48) 0 1px, transparent 2px),
+        radial-gradient(circle at 65% 40%, rgba(143, 119, 69, 0.42) 0 1px, transparent 2px),
+        radial-gradient(circle at 50% 70%, rgba(143, 119, 69, 0.4) 0 1px, transparent 2px),
+        linear-gradient(#e6d398, #d7bc7f);
 
     box-shadow:
-        0 2px 4px rgba(120, 90, 40, 0.15);
+        0 2px 4px rgba(120, 90, 40, 0.08);
 
-    z-index: 10;
+    z-index: 5;
 
     transition:
         opacity 0.5s ease,
@@ -845,9 +784,7 @@ body > .subtitle {
     left: 51px;
     top: 18px;
 
-    border-radius:
-        50% 50% 45% 45% /
-        32% 32% 68% 68%;
+    border-radius: 49% 51% 44% 46% / 82% 80% 30% 32%;
 }
 
 
@@ -882,7 +819,7 @@ body > .subtitle {
         rotate(-12deg)
         scaleX(0.72);
 
-    border-radius: 50%;
+    border-radius: 49% 51% 44% 46% / 82% 80% 30% 32%;
 }
 
 .lotus.closed .petal-outer-right {
@@ -891,7 +828,7 @@ body > .subtitle {
         rotate(12deg)
         scaleX(0.72);
 
-    border-radius: 50%;
+    border-radius: 49% 51% 44% 46% / 82% 80% 30% 32%;
 }
 
 
@@ -964,6 +901,19 @@ body > .subtitle {
         translate(7px, -18px)
         rotate(9deg)
         scaleX(0.72);
+}
+
+.petal-outer-left::after,
+.petal-outer-right::after,
+.petal-front-center::after {
+    content: "";
+    position: absolute;
+    inset: 15% 22% 12%;
+    border-left: 0.5px solid rgba(156, 73, 104, 0.12);
+    border-right: 0.5px solid rgba(156, 73, 104, 0.08);
+    border-radius: 50%;
+    background: linear-gradient(90deg, transparent 49%, rgba(156, 73, 104, 0.09) 50%, transparent 51%);
+    pointer-events: none;
 }
 
 /* ========================================
@@ -1427,9 +1377,9 @@ body > .subtitle {
     width: 80px;
     height: 35px;
 
-    border: 1px solid rgba(245, 255, 252, 0.28);
-    border-right-color: rgba(245, 255, 252, 0.18);
-    border-bottom-color: rgba(245, 255, 252, 0.20);
+    border: 1px solid rgba(245, 255, 252, 0.35);
+    border-right-color: rgba(245, 255, 252, 0.225);
+    border-bottom-color: rgba(245, 255, 252, 0.25);
     border-radius: 48% 52% 46% 54%;
     filter: blur(0.25px);
     pointer-events: none;
@@ -1592,6 +1542,11 @@ body > .subtitle {
     
 
     <!-- 莲蓬 -->
+    <!-- Foreground petals: share the existing closed-state rules. -->
+    <div class="petal petal-front-left"></div>
+    <div class="petal petal-front-center"></div>
+    <div class="petal petal-front-right"></div>
+
     <div class="lotus-center"></div>
 
 </div>
